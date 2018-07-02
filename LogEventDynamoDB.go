@@ -11,6 +11,7 @@ import (
 	"github.com/kkesley/random"
 )
 
+//LogEventDynamoDB log an event to dynamodb table
 func LogEventDynamoDB(tableName string, region string, event EventType) error {
 	event.Principal = event.Principal + "[" + time.Now().Format("20060102150405.999999999Z07:00") + ":" + random.MakeID(20) + "]"
 	ev, err := dynamodbattribute.MarshalMap(event)
