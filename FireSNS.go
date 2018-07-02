@@ -25,8 +25,9 @@ func FireSNSWithAttribute(topic string, message string, attributes map[string]st
 		}
 	}
 	params := &sns.PublishInput{
-		Message:  aws.String(message), // This is the message itself (can be XML / JSON / Text - anything you want)
-		TopicArn: aws.String(topic),   //Get this from the Topic in the AWS console.
+		Message:           aws.String(message), // This is the message itself (can be XML / JSON / Text - anything you want)
+		TopicArn:          aws.String(topic),   //Get this from the Topic in the AWS console.
+		MessageAttributes: snsAttributes,
 	}
 
 	resp, err := svc.Publish(params) //Call to puclish the message
