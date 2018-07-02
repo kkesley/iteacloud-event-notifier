@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"time"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
@@ -31,11 +32,11 @@ func LogEventS3(sess *session.Session, bucket string, key string, EventType Even
 }
 
 //LogEventS3Default sends email without s3 session
-func LogEventS3Default(region string, bucket string, key string, eventType EventType) error {
+func LogEventS3Default(region string, bucket string, eventType EventType) error {
 	config := aws.Config{
 		Region: aws.String(region),
 	}
 	sess := session.Must(session.NewSession(&config))
 
-	return LogEventS3(sess, bucket, key, eventType)
+	return LogEventS3(sess, bucket, time.Now().Format("20060102150405.999999999Z07:00")+"_"+eventType.ClientID+"_", eventType)
 }
