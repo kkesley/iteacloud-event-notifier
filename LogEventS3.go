@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 	"strings"
+	"time"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
@@ -38,5 +39,5 @@ func LogEventS3Default(region string, bucket string, key string, eventType Event
 	}
 	sess := session.Must(session.NewSession(&config))
 
-	return LogEventS3(sess, bucket, key, eventType)
+	return LogEventS3(sess, bucket, time.Now().Format("20060102150405.999999999Z07:00")+"_"+eventType.ClientID+"_"+key, eventType)
 }
