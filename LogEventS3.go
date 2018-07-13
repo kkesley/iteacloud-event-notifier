@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"strings"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
@@ -12,19 +13,19 @@ import (
 )
 
 //LogEventS3 use reusable s3 session
-func LogEventS3(sess *session.Session, bucket string, key string, EventType EventType) error {
+func LogEventS3(sess *session.Session, bucket string, key string, eventType EventType) error {
 	if len(key) <= 0 {
 		return errors.New("key must not be empty")
 	}
 	svc := s3.New(sess)
-	strEmail, err := json.Marshal(EventType)
+	strEmail, err := json.Marshal(eventType)
 	if err != nil {
 		return err
 	}
 	fmt.Println("sending to s3")
 	_, err = svc.PutObject(&s3.PutObjectInput{
 		Bucket: aws.String(bucket),
-		Key:    aws.String(key + ".json"),
+		Key:    aws.String(strings.Replace(eventType.Event, ":", "_", -1) + "/" + key + ".json"),
 		Body:   bytes.NewReader(strEmail),
 	})
 	return err
